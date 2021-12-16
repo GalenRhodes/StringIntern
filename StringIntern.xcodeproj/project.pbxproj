@@ -7,10 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		83AB147E276A260100D95DBE /* StringIntern.docc in Sources */ = {isa = PBXBuildFile; fileRef = 83AB147D276A260100D95DBE /* StringIntern.docc */; };
-		83AB1484276A260200D95DBE /* StringIntern.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83AB1479276A260100D95DBE /* StringIntern.framework */; };
+		1117D047280D8CC437D1D5FF /* Items.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1117D58C0D022E88249DB008 /* Items.swift */; };
+		1117D05EAFAFBF1C9B023B8F /* StringIntern.h in Headers */ = {isa = PBXBuildFile; fileRef = 1117D92AD66F1893259B17AD /* StringIntern.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1117D134FA4284539775234C /* Side.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1117DCDA1604843233E03008 /* Side.swift */; };
+		1117D51943512299FB1C8A7D /* ReadWriteLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1117D37F3D16C34FE583A334 /* ReadWriteLock.swift */; };
+		1117D5C773C725F99C250EF6 /* StringIntern.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1117D53E1A42E29D21BDCA30 /* StringIntern.framework */; };
+		1117D85C513ADA677E0E24D1 /* TNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1117D7489CCF69CF7DA1FA5E /* TNode.swift */; };
+		1117DC07FBEA152997FC8AB6 /* ThreadLocal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1117D4BFA868B7584727B8A5 /* ThreadLocal.swift */; };
+		1117DC3FB5086E100D4409CC /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1117DB789C45648FB5A66B40 /* Color.swift */; };
+		1117DE65E43A2CFAE5C9343D /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1117DC8B1F8E53EE89C9A6A0 /* Utils.swift */; };
 		83AB1489276A260200D95DBE /* StringInternTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AB1488276A260200D95DBE /* StringInternTests.swift */; };
-		83AB148A276A260200D95DBE /* StringIntern.h in Headers */ = {isa = PBXBuildFile; fileRef = 83AB147C276A260100D95DBE /* StringIntern.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		83AB1496276A290500D95DBE /* StringIntern.docc in Sources */ = {isa = PBXBuildFile; fileRef = 83AB1495276A290500D95DBE /* StringIntern.docc */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -24,11 +31,23 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		83AB1479276A260100D95DBE /* StringIntern.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = StringIntern.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		83AB147C276A260100D95DBE /* StringIntern.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StringIntern.h; sourceTree = "<group>"; };
-		83AB147D276A260100D95DBE /* StringIntern.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = StringIntern.docc; sourceTree = "<group>"; };
-		83AB1483276A260200D95DBE /* StringInternTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StringInternTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1117D0C31736D6380ABE00AE /* .jazzy.yaml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .jazzy.yaml; sourceTree = "<group>"; };
+		1117D37F3D16C34FE583A334 /* ReadWriteLock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadWriteLock.swift; sourceTree = "<group>"; };
+		1117D4BFA868B7584727B8A5 /* ThreadLocal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadLocal.swift; sourceTree = "<group>"; };
+		1117D53E1A42E29D21BDCA30 /* StringIntern.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StringIntern.framework; path = "../../../Library/Caches/JetBrains/AppCode2021.3/DerivedData/StringIntern-dgqdccfydeebaldyyzyeephabbmo/Build/Products/Debug/StringIntern.framework"; sourceTree = "<group>"; };
+		1117D58C0D022E88249DB008 /* Items.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Items.swift; sourceTree = "<group>"; };
+		1117D5F3B6F8786A83D1C0E7 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = file.gitignore; path = .gitignore; sourceTree = "<group>"; };
+		1117D614A5B8679840C771C8 /* Package.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		1117D7489CCF69CF7DA1FA5E /* TNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TNode.swift; sourceTree = "<group>"; };
+		1117D75D885B17784DA42330 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		1117D92AD66F1893259B17AD /* StringIntern.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringIntern.h; sourceTree = "<group>"; };
+		1117DA3DEF7BC00E0DE72A1F /* StringInternTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file.xctest; name = StringInternTests.xctest; path = "../../../Library/Caches/JetBrains/AppCode2021.3/DerivedData/StringIntern-dgqdccfydeebaldyyzyeephabbmo/Build/Products/Debug/StringInternTests.xctest"; sourceTree = "<group>"; };
+		1117DAB357EE15CEB9AC4A2F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		1117DB789C45648FB5A66B40 /* Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		1117DC8B1F8E53EE89C9A6A0 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		1117DCDA1604843233E03008 /* Side.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Side.swift; sourceTree = "<group>"; };
 		83AB1488276A260200D95DBE /* StringInternTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringInternTests.swift; sourceTree = "<group>"; };
+		83AB1495276A290500D95DBE /* StringIntern.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = StringIntern.docc; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,36 +62,64 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83AB1484276A260200D95DBE /* StringIntern.framework in Frameworks */,
+				1117D5C773C725F99C250EF6 /* StringIntern.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1117D4E7F50FEB31D7616C64 /* Project */ = {
+			isa = PBXGroup;
+			children = (
+				1117D5F3B6F8786A83D1C0E7 /* .gitignore */,
+				1117DAB357EE15CEB9AC4A2F /* README.md */,
+				1117D614A5B8679840C771C8 /* Package.swift */,
+				1117D75D885B17784DA42330 /* LICENSE */,
+				1117D0C31736D6380ABE00AE /* .jazzy.yaml */,
+				1117DC80EDFCB0C9C07BABBE /* Products */,
+			);
+			name = Project;
+			sourceTree = "<group>";
+		};
+		1117DC57D8577BF897C3850C /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				1117D92AD66F1893259B17AD /* StringIntern.h */,
+			);
+			name = Other;
+			sourceTree = "<group>";
+		};
+		1117DC80EDFCB0C9C07BABBE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1117D53E1A42E29D21BDCA30 /* StringIntern.framework */,
+				1117DA3DEF7BC00E0DE72A1F /* StringInternTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		83AB146F276A260100D95DBE = {
 			isa = PBXGroup;
 			children = (
-				83AB147B276A260100D95DBE /* StringIntern */,
-				83AB1487276A260200D95DBE /* StringInternTests */,
-				83AB147A276A260100D95DBE /* Products */,
+				83AB1494276A262500D95DBE /* Tests */,
+				83AB1493276A261A00D95DBE /* Sources */,
+				1117D4E7F50FEB31D7616C64 /* Project */,
 			);
-			sourceTree = "<group>";
-		};
-		83AB147A276A260100D95DBE /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				83AB1479276A260100D95DBE /* StringIntern.framework */,
-				83AB1483276A260200D95DBE /* StringInternTests.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		83AB147B276A260100D95DBE /* StringIntern */ = {
 			isa = PBXGroup;
 			children = (
-				83AB147C276A260100D95DBE /* StringIntern.h */,
-				83AB147D276A260100D95DBE /* StringIntern.docc */,
+				83AB1495276A290500D95DBE /* StringIntern.docc */,
+				1117DC57D8577BF897C3850C /* Other */,
+				1117D37F3D16C34FE583A334 /* ReadWriteLock.swift */,
+				1117DC8B1F8E53EE89C9A6A0 /* Utils.swift */,
+				1117D4BFA868B7584727B8A5 /* ThreadLocal.swift */,
+				1117D58C0D022E88249DB008 /* Items.swift */,
+				1117D7489CCF69CF7DA1FA5E /* TNode.swift */,
+				1117DB789C45648FB5A66B40 /* Color.swift */,
+				1117DCDA1604843233E03008 /* Side.swift */,
 			);
 			path = StringIntern;
 			sourceTree = "<group>";
@@ -85,6 +132,22 @@
 			path = StringInternTests;
 			sourceTree = "<group>";
 		};
+		83AB1493276A261A00D95DBE /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				83AB147B276A260100D95DBE /* StringIntern */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		83AB1494276A262500D95DBE /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				83AB1487276A260200D95DBE /* StringInternTests */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -92,7 +155,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83AB148A276A260200D95DBE /* StringIntern.h in Headers */,
+				1117D05EAFAFBF1C9B023B8F /* StringIntern.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,7 +177,6 @@
 			);
 			name = StringIntern;
 			productName = StringIntern;
-			productReference = 83AB1479276A260100D95DBE /* StringIntern.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		83AB1482276A260200D95DBE /* StringInternTests */ = {
@@ -132,7 +194,6 @@
 			);
 			name = StringInternTests;
 			productName = StringInternTests;
-			productReference = 83AB1483276A260200D95DBE /* StringInternTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -162,7 +223,6 @@
 				Base,
 			);
 			mainGroup = 83AB146F276A260100D95DBE;
-			productRefGroup = 83AB147A276A260100D95DBE /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -194,7 +254,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83AB147E276A260100D95DBE /* StringIntern.docc in Sources */,
+				83AB1496276A290500D95DBE /* StringIntern.docc in Sources */,
+				1117D51943512299FB1C8A7D /* ReadWriteLock.swift in Sources */,
+				1117DE65E43A2CFAE5C9343D /* Utils.swift in Sources */,
+				1117DC07FBEA152997FC8AB6 /* ThreadLocal.swift in Sources */,
+				1117D047280D8CC437D1D5FF /* Items.swift in Sources */,
+				1117D85C513ADA677E0E24D1 /* TNode.swift in Sources */,
+				1117DC3FB5086E100D4409CC /* Color.swift in Sources */,
+				1117D134FA4284539775234C /* Side.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
