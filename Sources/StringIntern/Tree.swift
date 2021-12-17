@@ -1,9 +1,9 @@
 /*===============================================================================================================================================================================*
  *     PROJECT: StringIntern
- *    FILENAME: Side.swift
+ *    FILENAME: Tree.swift
  *         IDE: AppCode
  *      AUTHOR: Galen Rhodes
- *        DATE: 12/15/21
+ *        DATE: 12/16/21
  *
  * Copyright © 2021. All rights reserved.
  *
@@ -18,18 +18,18 @@
 import Foundation
 import CoreFoundation
 
-enum Side {
-    case Left
-    case Right
-    case Neither
-}
+struct Tree<T: KeyedItem> {
+    var rootNode: TNode<T>? = nil
 
-extension Side {
-    @inlinable static prefix func ! (side: Side) -> Side {
-        switch side {
-            case .Left:    return .Right
-            case .Right:   return .Left
-            case .Neither: return .Neither
-        }
+    @inlinable init() {}
+
+    @inlinable subscript(key: T.K) -> T? { rootNode?.find(key: key)?.item }
+
+    @inlinable mutating func insert(_ item: T) {
+        rootNode = (rootNode == nil ? TNode<T>(item: item) : rootNode!.insert(item: item))
+    }
+
+    @inlinable mutating func remove(key: T.K) {
+        rootNode = rootNode?.find(key: key)?.remove()
     }
 }

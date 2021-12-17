@@ -32,10 +32,7 @@ import CoreFoundation
 #endif
 
 class ReadWriteLock {
-    private enum RWState { case None, Read, Write }
-
-    @ThreadLocal private var rwState: RWState = .None
-    private var              lock:    OSRWLock
+    private var lock: OSRWLock
 
     init() {
         lock = OSRWLock.allocate(capacity: 1)
@@ -44,7 +41,6 @@ class ReadWriteLock {
         #else
             guard pthread_rwlock_init(lock, nil) == 0 else { fatalError("Unable to initialize read/write lock.") }
         #endif
-        rwState = .None
     }
 
     deinit {
@@ -53,100 +49,50 @@ class ReadWriteLock {
         #endif
         lock.deallocate()
     }
+}
 
-    func readLock() {
-        guard rwState == .None else { fatalError("Thread already owns the lock  for \(rwState == .Read ? "reading" : "writing").") }
+extension ReadWriteLock {
+    @inlinable func readLock() {
         #if os(Windows)
             AcquireSRWLockShared(lock)
         #else
             guard pthread_rwlock_rdlock(lock) == 0 else { fatalError("Unknown Error.") }
         #endif
-        rwState = .Read
     }
 
-    func tryReadLock() -> Bool {
-        guard rwState == .None else { fatalError("Thread already owns the lock  for \(rwState == .Read ? "reading" : "writing").") }
-        var success: Bool = false
+    @inlinable func readUnlock() {
         #if os(Windows)
-            success = (TryAcquireSRWLockShared(lock) != 0)
+            ReleaseSRWLockShared(lock)
         #else
-            let r = pthread_rwlock_tryrdlock(lock)
-            guard value(r, isOneOf: 0, EBUSY) else { fatalError("Unknown Error.") }
-            success = (r == 0)
+            pthread_rwlock_unlock(lock)
         #endif
-        if success { rwState = .Read }
-        return success
     }
 
-    func writeLock() {
-        guard rwState == .None else { fatalError("Thread already owns the lock  for \(rwState == .Read ? "reading" : "writing").") }
+    @inlinable func writeLock() {
         #if os(Windows)
             AcquireSRWLockExclusive(lock)
         #else
             guard pthread_rwlock_wrlock(lock) == 0 else { fatalError("Unknown Error.") }
         #endif
-        rwState = .Write
     }
 
-    func tryWriteLock() -> Bool {
-        guard rwState == .None else { fatalError("Thread already owns the lock  for \(rwState == .Read ? "reading" : "writing").") }
-        var success: Bool = false
+    @inlinable func writeUnlock() {
         #if os(Windows)
-            success = (TryAcquireSRWLockExclusive(lock) != 0)
+            ReleaseSRWLockExclusive(lock)
         #else
-            let r = pthread_rwlock_tryrdlock(lock)
-            guard value(r, isOneOf: 0, EBUSY) else { fatalError("Unknown Error.") }
-            success = (r == 0)
+            pthread_rwlock_unlock(lock)
         #endif
-        if success { rwState = .Write }
-        return success
     }
-
-    func unlock() {
-        switch rwState {
-            case .Read:
-                #if os(Windows)
-                    ReleaseSRWLockShared(lock)
-                #else
-                    pthread_rwlock_unlock(lock)
-                #endif
-            case .Write:
-                #if os(Windows)
-                    ReleaseSRWLockExclusive(lock)
-                #else
-                    pthread_rwlock_unlock(lock)
-                #endif
-            default:
-                fatalError("Thread does not currently own the lock.")
-        }
-        rwState = .None
-    }
-}
-
-extension ReadWriteLock {
 
     @inlinable func withReadLock<T>(_ body: () throws -> T) rethrows -> T {
         readLock()
-        defer { unlock() }
+        defer { readUnlock() }
         return try body()
     }
 
     @inlinable func withWriteLock<T>(_ body: () throws -> T) rethrows -> T {
         writeLock()
-        defer { unlock() }
-        return try body()
-    }
-
-    @inlinable func tryWithReadLock<T>(_ body: () throws -> T) rethrows -> T? {
-        guard tryReadLock() else { return nil }
-        defer { unlock() }
-        return try body()
-    }
-
-    @inlinable func tryWithWriteLock<T>(_ body: () throws -> T) rethrows -> T? {
-        guard tryWriteLock() else { return nil }
-        defer { unlock() }
+        defer { writeUnlock() }
         return try body()
     }
 }
-

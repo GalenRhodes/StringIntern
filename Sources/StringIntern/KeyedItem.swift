@@ -1,9 +1,9 @@
 /*===============================================================================================================================================================================*
  *     PROJECT: StringIntern
- *    FILENAME: Color.swift
+ *    FILENAME: KeyedItem.swift
  *         IDE: AppCode
  *      AUTHOR: Galen Rhodes
- *        DATE: 12/15/21
+ *        DATE: 12/17/21
  *
  * Copyright © 2021. All rights reserved.
  *
@@ -18,13 +18,30 @@
 import Foundation
 import CoreFoundation
 
-enum Color {
-    case Black
-    case Red
+protocol KeyedItem: Hashable {
+    associatedtype K where K: Comparable
+
+    var key:    K { get }
+    var item:   ItemCore { get }
+    var index:  UInt64 { get }
+    var string: String { get }
 }
 
-extension Color {
-    @inlinable static func isBlack<K, T>(_ node: TNode<K, T>?) -> Bool where K: Comparable, T: KeyedItem<K> { ((node == nil) || (node!.color == .Black)) }
+struct Item<T: Comparable>: KeyedItem {
+    typealias K = T
 
-    @inlinable static func isRed<K, T>(_ node: TNode<K, T>?) -> Bool where K: Comparable, T: KeyedItem<K> { ((node != nil) && (node!.color == .Red)) }
+    let item: ItemCore
+
+    init(item: ItemCore) { self.item = item }
+}
+
+extension KeyedItem {
+    @inlinable var index:  UInt64 { item.index }
+    @inlinable var string: String { item.string }
+
+    @inlinable func hash(into hasher: inout Hasher) { hasher.combine(item) }
+
+    @inlinable static func == (lhs: Self, rhs: Self) -> Bool { lhs.item == rhs.item }
+
+    @inlinable var key: K { ((type(of: K.self) == type(of: UInt64.self) ? item.index as! K : item.string as! K)) }
 }

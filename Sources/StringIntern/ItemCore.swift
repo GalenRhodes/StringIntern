@@ -1,9 +1,9 @@
 /*===============================================================================================================================================================================*
  *     PROJECT: StringIntern
- *    FILENAME: ThreadLocal.swift
+ *    FILENAME: ItemCore.swift
  *         IDE: AppCode
  *      AUTHOR: Galen Rhodes
- *        DATE: 12/15/21
+ *        DATE: 12/17/21
  *
  * Copyright © 2021. All rights reserved.
  *
@@ -18,30 +18,22 @@
 import Foundation
 import CoreFoundation
 
-/*==============================================================================================================*/
-/// Thread Local Property Wrapper. A property marked with this wrapper will reserve storage for each thread so
-/// that the values gotten and set will only be seen by that thread.
-///
-/// NOTE: DispatchQueues reuse threads. This means that multiple items put onto a dispatch queue may see and
-/// manipulate each other's data.
-///
-@propertyWrapper
-struct ThreadLocal<T> {
-    @usableFromInline let initialValue: T
-    @usableFromInline let key:          String = UUID().uuidString
+class ItemCore: Hashable {
+    let index:    UInt64
+    let string:   String
+    var useCount: Int64 = 1
 
-    @inlinable var wrappedValue: T {
-        get {
-            if Thread.current.threadDictionary.allKeys.contains(where: { ($0 as? String) == key }), let v = Thread.current.threadDictionary[key] as? T { return v }
-            Thread.current.threadDictionary[key] = initialValue
-            return initialValue
-        }
-        set {
-            Thread.current.threadDictionary[key] = newValue
-        }
+    init(index: UInt64, string: String) {
+        self.index = index
+        self.string = string
+    }
+}
+
+extension ItemCore {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(index)
+        hasher.combine(string)
     }
 
-    init(wrappedValue: T) {
-        initialValue = wrappedValue
-    }
+    static func == (lhs: ItemCore, rhs: ItemCore) -> Bool { ((lhs === rhs) || ((type(of: lhs) == type(of: rhs)) && (lhs.index == rhs.index) && (lhs.string == rhs.string))) }
 }
