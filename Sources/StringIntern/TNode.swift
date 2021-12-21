@@ -18,22 +18,22 @@
 import Foundation
 import CoreFoundation
 
-let ERR_MSG_PFX:             String = "Internal Inconsistency Error"
-let ERR_MSG_MISSING_GRAND:   String = "\(ERR_MSG_PFX): Missing Grandparent"
-let ERR_MSG_MISSING_SIBLING: String = "\(ERR_MSG_PFX): Missing Sibling"
-let ERR_MSG_MISSING_NEPHEW:  String = "\(ERR_MSG_PFX): Missing Distant Nephew"
-let ERR_MSG_ROTATE_LEFT:     String = "\(ERR_MSG_PFX): Cannot rotate left - no right child node."
-let ERR_MSG_ROTATE_RIGHT:    String = "\(ERR_MSG_PFX): Cannot rotate right - no left child node."
+let                   ERR_MSG_PFX:             String = "Internal Inconsistency Error"
+let                   ERR_MSG_MISSING_GRAND:   String = "\(ERR_MSG_PFX): Missing Grandparent"
+let                   ERR_MSG_MISSING_SIBLING: String = "\(ERR_MSG_PFX): Missing Sibling"
+let                   ERR_MSG_MISSING_NEPHEW:  String = "\(ERR_MSG_PFX): Missing Distant Nephew"
+@usableFromInline let ERR_MSG_ROTATE_LEFT:     String = "\(ERR_MSG_PFX): Cannot rotate left - no right child node."
+@usableFromInline let ERR_MSG_ROTATE_RIGHT:    String = "\(ERR_MSG_PFX): Cannot rotate right - no left child node."
 
-class TNode<T: KeyedItem>: Hashable {
+@usableFromInline class TNode<T: KeyedItem>: Hashable {
     //@f:0
-    enum Color: UInt8 { case Black = 0, Red   = 1 }
-    enum Side:  Int   { case Left  = 0, Right = 1 }
+    @usableFromInline enum Color: UInt8 { case Black = 0, Red   = 1 }
+    @usableFromInline enum Side:  Int   { case Left  = 0, Right = 1 }
 
-    private(set) var item: T
+    @usableFromInline private(set) var item: T
     //@f:1
 
-    convenience init(item: T) {
+    @usableFromInline convenience init(item: T) {
         self.init(item: item, color: .Black)
     }
 
@@ -42,9 +42,9 @@ class TNode<T: KeyedItem>: Hashable {
         self.color = color
     }
 
-    func find(key k: T.K) -> TNode<T>? { foo(key: k, onHit: { $0 }, onMiss: { _, _ in nil }) }
+    @usableFromInline func find(key k: T.K) -> TNode<T>? { foo(key: k, onHit: { $0 }, onMiss: { _, _ in nil }) }
 
-    func insert(item i: T) -> TNode<T> {
+    @usableFromInline func insert(item i: T) -> TNode<T> {
         foo(key: i.key) { n in
             n.item = i
             return n.root
@@ -55,7 +55,7 @@ class TNode<T: KeyedItem>: Hashable {
         }!
     }
 
-    func remove() -> TNode<T>? {
+    @usableFromInline func remove() -> TNode<T>? {
         if let l = self[.Left], let r = self[.Right] {
             let other = (Bool.random() ? l.farRight : r.farLeft)
             swap(&item, &other.item)
@@ -77,8 +77,8 @@ class TNode<T: KeyedItem>: Hashable {
     }
 
     //@f:0
-    private var color: Color
-    private var nodes: [TNode<T>?] = [ nil, nil, nil ]
+    @usableFromInline  var color: Color
+    @usableFromInline  var nodes: [TNode<T>?] = [ nil, nil, nil ]
     //@f:1
 }
 

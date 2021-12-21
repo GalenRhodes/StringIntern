@@ -18,30 +18,25 @@
 import Foundation
 import CoreFoundation
 
-protocol KeyedItem: Hashable {
-    associatedtype K where K: Comparable
+@usableFromInline protocol KeyedItem: Hashable, Comparable {
+    associatedtype K where K: Comparable & Hashable
 
-    var key:    K { get }
-    var item:   ItemCore { get }
-    var index:  UInt64 { get }
-    var string: String { get }
+    var key:  K { get }
+    var item: ItemCore { get }
 }
 
-struct Item<T: Comparable>: KeyedItem {
-    typealias K = T
+@usableFromInline struct Item: KeyedItem {
+    @usableFromInline typealias K = String
 
-    let item: ItemCore
+    @usableFromInline let item: ItemCore
 
-    init(item: ItemCore) { self.item = item }
-}
+    @inlinable init(item: ItemCore) { self.item = item }
 
-extension KeyedItem {
-    @inlinable var index:  UInt64 { item.index }
-    @inlinable var string: String { item.string }
+    @inlinable var key: String { item.string }
 
     @inlinable func hash(into hasher: inout Hasher) { hasher.combine(item) }
 
     @inlinable static func == (lhs: Self, rhs: Self) -> Bool { lhs.item == rhs.item }
 
-    @inlinable var key: K { ((type(of: K.self) == type(of: UInt64.self) ? item.index as! K : item.string as! K)) }
+    @inlinable static func < (lhs: Self, rhs: Self) -> Bool { lhs.item < rhs.item }
 }

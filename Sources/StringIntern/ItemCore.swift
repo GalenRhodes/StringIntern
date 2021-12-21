@@ -18,22 +18,34 @@
 import Foundation
 import CoreFoundation
 
-class ItemCore: Hashable {
-    let index:    UInt64
-    let string:   String
-    var useCount: Int64 = 1
+@usableFromInline class ItemCore: Hashable, Comparable {
+    @usableFromInline let index:    UInt64
+    @usableFromInline let string:   String
+    @usableFromInline var useCount: UInt64 = 1
 
-    init(index: UInt64, string: String) {
+    @usableFromInline init(index: UInt64 = 0, string: String) {
         self.index = index
         self.string = string
     }
 }
 
 extension ItemCore {
-    func hash(into hasher: inout Hasher) {
+    @discardableResult @inlinable func incUse() -> UInt64 {
+        useCount += 1
+        return useCount
+    }
+
+    @discardableResult @inlinable func decUse() -> UInt64 {
+        if useCount > 0 { useCount -= 1 }
+        return useCount
+    }
+
+    @inlinable func hash(into hasher: inout Hasher) {
         hasher.combine(index)
         hasher.combine(string)
     }
 
-    static func == (lhs: ItemCore, rhs: ItemCore) -> Bool { ((lhs === rhs) || ((type(of: lhs) == type(of: rhs)) && (lhs.index == rhs.index) && (lhs.string == rhs.string))) }
+    @inlinable static func < (lhs: ItemCore, rhs: ItemCore) -> Bool { lhs.string < rhs.string }
+
+    @inlinable static func == (lhs: ItemCore, rhs: ItemCore) -> Bool { ((lhs === rhs) || ((type(of: lhs) == type(of: rhs)) && (lhs.string == rhs.string))) }
 }

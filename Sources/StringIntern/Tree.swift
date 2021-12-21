@@ -18,8 +18,8 @@
 import Foundation
 import CoreFoundation
 
-struct Tree<T: KeyedItem> {
-    var rootNode: TNode<T>? = nil
+@usableFromInline struct Tree<T: KeyedItem> {
+    @usableFromInline var rootNode: TNode<T>? = nil
 
     @inlinable init() {}
 

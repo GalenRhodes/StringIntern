@@ -31,7 +31,7 @@ import CoreFoundation
     fileprivate typealias OSThreadKey = pthread_key_t
 #endif
 
-class ReadWriteLock {
+@usableFromInline class ReadWriteLock {
     private var lock: OSRWLock
 
     init() {
