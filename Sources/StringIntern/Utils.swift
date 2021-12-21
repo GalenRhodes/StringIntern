@@ -51,3 +51,11 @@ func <=> <T>(left: T?, right: T?) -> ComparisonResults where T: Comparable {
     guard let o = obj else { fatalError(msg) }
     return o
 }
+
+@usableFromInline typealias SwitchCase<R> = () throws -> R
+@usableFromInline typealias CaseSet<T: Equatable, R> = (value: T, action: SwitchCase<R>)
+
+@inlinable func inlineSwitch<T: Equatable, R>(_ sw: T, cases: CaseSet<T, R>..., default def: SwitchCase<R>) rethrows -> R {
+    for sc in cases { if sw == sc.value { return try sc.action() } }
+    return try def()
+}

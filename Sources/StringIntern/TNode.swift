@@ -26,32 +26,11 @@ let ERR_MSG_ROTATE_LEFT:     String = "\(ERR_MSG_PFX): Cannot rotate left - no r
 let ERR_MSG_ROTATE_RIGHT:    String = "\(ERR_MSG_PFX): Cannot rotate right - no left child node."
 
 class TNode<T: KeyedItem>: Hashable {
-    func hash(into hasher: inout Hasher) { hasher.combine(item) }
-
-    static func == (lhs: TNode<T>, rhs: TNode<T>) -> Bool { lhs === rhs }
-
-    enum Color: UInt8 {
-        case Black = 0
-        case Red
-    }
-
-    enum Side {
-        case Left
-        case Right
-        case Neither
-    }
-
     //@f:0
-    private(set) var item:       T
-    private      var color:      Color
-    private      var parentNode: TNode<T>?
-    private      var _leftNode:   TNode<T>?
-    private      var _rightNode:  TNode<T>?
+    enum Color: UInt8 { case Black = 0, Red   = 1 }
+    enum Side:  Int   { case Left  = 0, Right = 1 }
 
-    private      var root:       TNode<T>  { parentNode == nil ? self : parentNode!.root    }
-    private      var farLeft:    TNode<T>  { leftNode == nil   ? self : leftNode!.farLeft   }
-    private      var farRight:   TNode<T>  { rightNode == nil  ? self : rightNode!.farRight }
-    private      var isAllBlack: Bool      { Color.isBlack(self) && Color.isBlack(leftNode) && Color.isBlack(rightNode) }
+    private(set) var item: T
     //@f:1
 
     convenience init(item: T) {
@@ -66,10 +45,14 @@ class TNode<T: KeyedItem>: Hashable {
     func find(key k: T.K) -> TNode<T>? {
         switch k <=> item.key {
             case .Equal:       return self
-            case .LessThan:    if let n = leftNode { return n.find(key: k) }
-            case .GreaterThan: if let n = rightNode { return n.find(key: k) }
+            case .LessThan:    return _find(key: k, side: .Left)
+            case .GreaterThan: return _find(key: k, side: .Right)
         }
-        return nil
+    }
+
+    private func _find(key k: T.K, side sd: Side) -> TNode<T>? {
+        guard let n = self[sd] else { return nil }
+        return n.find(key: k)
     }
 
     func insert(item i: T) -> TNode<T> {
@@ -78,31 +61,21 @@ class TNode<T: KeyedItem>: Hashable {
                 self.item = i
                 return root
             case .LessThan:
-                if let l = leftNode { return l.insert(item: i) }
-                let l = TNode<T>(item: i, color: .Red)
-                l.parentNode = self
-                leftNode = l
-                l.postInsert()
-                return l.root
+                return _insert(item: i, side: .Left)
             case .GreaterThan:
-                if let r = rightNode { return r.insert(item: i) }
-                let r = TNode<T>(item: i, color: .Red)
-                r.parentNode = self
-                rightNode = r
-                r.postInsert()
-                return r.root
+                return _insert(item: i, side: .Right)
         }
     }
 
     func remove() -> TNode<T>? {
-        if let l = leftNode, let r = rightNode {
+        if let l = self[.Left], let r = self[.Right] {
             let other = (Bool.random() ? l.farRight : r.farLeft)
             swap(&item, &other.item)
             return other.remove()
         }
-        else if let c = (leftNode ?? rightNode) {
+        else if let c = (self[.Left] ?? self[.Right]) {
             c.paintBlack()
-            swapSelfWith(node: c)
+            swapWith(node: c)
             return c.root
         }
         else if let p = parentNode {
@@ -114,8 +87,84 @@ class TNode<T: KeyedItem>: Hashable {
         return nil
     }
 
+    //@f:0
+    private var color:      Color
+    private var parentNode: TNode<T>?
+    private var children:   [TNode<T>?] = [ nil, nil ]
+    //@f:1
+}
+
+extension TNode {
+    //@f:0
+    private var farLeft:    TNode<T>  { self[.Left] == nil   ? self : self[.Left]!.farLeft   }
+    private var farRight:   TNode<T>  { self[.Right] == nil  ? self : self[.Right]!.farRight }
+    private var root:       TNode<T>  { parentNode == nil ? self : parentNode!.root    }
+    private var isAllBlack: Bool      { Color.isBlack(self) && Color.isBlack(self[.Left]) && Color.isBlack(self[.Right]) }
+    //@f:1
+
+    private subscript(sd: Side) -> TNode<T>? {
+        get { children[sd.rawValue] }
+        set {
+            let c = self[sd]
+            if c != newValue {
+                if let n = c { n.parentNode = nil }
+                if let n = newValue { n.makeOrphan().parentNode = self }
+                children[sd.rawValue] = newValue
+            }
+        }
+    }
+
+    private func paintRed() { color = .Red }
+
+    private func paintBlack() { color = .Black }
+
+    private func rotate(direction dir: Side) {
+        guard let n = self[!dir] else { fatalError(dir == .Left ? ERR_MSG_ROTATE_LEFT : ERR_MSG_ROTATE_RIGHT) }
+        swapWith(node: n)
+        self[!dir] = n[dir]
+        n[dir] = self
+        swap(&color, &n.color)
+    }
+
+    @discardableResult private func makeOrphan() -> TNode<T> { swapWith(node: nil)! }
+
+    @discardableResult private func swapWith(node n: TNode<T>?) -> TNode<T>? {
+        ifNotNil(parentNode, { p in p[side(p)] = n })
+        return n
+    }
+
+    private func side(_ p: TNode<T>) -> Side { ((self === p.self[.Left]) ? .Left : .Right) }
+
+    private func _insert(item i: T, side sd: Side) -> TNode<T> {
+        if let n = self[sd] { return n.insert(item: i) }
+        let n = TNode<T>(item: i, color: .Red)
+        n.parentNode = self
+        self[sd] = n
+        n.postInsert()
+        return n.root
+    }
+
+    private func postInsert() {
+        guard let p = parentNode else { return paintBlack() }
+        guard Color.isRed(p) else { return }
+        guard let g = p.parentNode else { fatalError(ERR_MSG_MISSING_GRAND) }
+
+        let ps = p.side(g)
+
+        if let u = g[!ps], Color.isRed(u) {
+            p.paintBlack()
+            u.paintBlack()
+            g.paintRed()
+            g.postInsert()
+        }
+        else {
+            if side(p) != ps { p.rotate(direction: ps) }
+            g.rotate(direction: !ps)
+        }
+    }
+
     private func preRemove(parent p: TNode<T>) {
-        let sd = (self === p.leftNode ? Side.Left : Side.Right)
+        let sd = side(p)
         let xd = !sd
         var s  = mustHave(p[xd], ERR_MSG_MISSING_SIBLING)
 
@@ -139,98 +188,9 @@ class TNode<T: KeyedItem>: Hashable {
         }
     }
 
-    private subscript(sd: Side) -> TNode<T>? {
-        switch sd {
-            case .Left:    return leftNode
-            case .Right:   return rightNode
-            case .Neither: return nil
-        }
-    }
+    func hash(into hasher: inout Hasher) { hasher.combine(item) }
 
-    private func paintBlack() { color = .Black }
-
-    private func paintRed() { color = .Red }
-
-    private func rotate(direction dir: Side) {
-        switch dir {
-            case .Left:
-                guard let r = rightNode else { fatalError(ERR_MSG_ROTATE_LEFT) }
-                let l = r.leftNode
-                swapSelfWith(node: r)
-                r.leftNode = self
-                parentNode = r
-                rightNode = l
-                if let n = l { n.parentNode = self }
-                swap(&color, &r.color)
-            case .Right:
-                guard let l = leftNode else { fatalError(ERR_MSG_ROTATE_RIGHT) }
-                let r = l.rightNode
-                swapSelfWith(node: l)
-                l.rightNode = self
-                parentNode = l
-                leftNode = r
-                if let n = r { n.parentNode = self }
-                swap(&color, &l.color)
-            case .Neither:
-                break
-        }
-    }
-
-    @discardableResult private func makeOrphan() -> TNode<T> {
-        guard let p = parentNode else { return self }
-        if self === p._leftNode { p.leftNode = nil }
-        else { p.rightNode = nil }
-        return self
-    }
-
-    private func swapSelfWith(node n: TNode<T>) {
-        n.makeOrphan()
-        if let p = parentNode {
-            parentNode = nil
-            n.parentNode = p
-            ifThis((self === p.leftNode), thenDo: { p.leftNode = n }, elseDo: { p.rightNode = n })
-        }
-    }
-
-    private func postInsert() {
-        guard let p = parentNode else { return paintBlack() }
-        guard Color.isRed(p) else { return }
-        guard let g = p.parentNode else { fatalError(ERR_MSG_MISSING_GRAND) }
-
-        let ps = (p === g.leftNode ? Side.Left : Side.Right)
-
-        if let u = g[!ps], Color.isRed(u) {
-            p.paintBlack()
-            u.paintBlack()
-            g.paintRed()
-            g.postInsert()
-        }
-        else {
-            if (self === p.leftNode ? Side.Left : Side.Right) != ps { p.rotate(direction: ps) }
-            g.rotate(direction: !ps)
-        }
-    }
-
-    private var leftNode:  TNode<T>? {
-        get { _leftNode }
-        set {
-            if _leftNode != newValue {
-                _leftNode?.parentNode = nil
-                newValue?.makeOrphan().parentNode = self
-                _leftNode = newValue
-            }
-        }
-    }
-    private var rightNode: TNode<T>? {
-        get { _rightNode }
-        set {
-            if _rightNode != newValue {
-                _rightNode?.parentNode = nil
-                newValue?.makeOrphan().parentNode = self
-                _rightNode = newValue
-            }
-        }
-    }
+    static func == (lhs: TNode<T>, rhs: TNode<T>) -> Bool { lhs === rhs }
 }
 
 extension TNode.Color {
@@ -240,5 +200,5 @@ extension TNode.Color {
 }
 
 extension TNode.Side {
-    @inlinable static prefix func ! (side: Self) -> Self { (side == .Left ? .Right : (side == .Right ? .Left : .Neither)) }
+    @inlinable static prefix func ! (side: Self) -> Self { (side == .Left ? .Right : .Left) }
 }
