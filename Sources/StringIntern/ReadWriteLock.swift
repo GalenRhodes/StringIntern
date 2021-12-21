@@ -52,27 +52,11 @@ class ReadWriteLock {
 }
 
 extension ReadWriteLock {
-    @inlinable func readLock() {
-        #if os(Windows)
-            AcquireSRWLockShared(lock)
-        #else
-            guard pthread_rwlock_rdlock(lock) == 0 else { fatalError("Unknown Error.") }
-        #endif
-    }
-
     @inlinable func readUnlock() {
         #if os(Windows)
             ReleaseSRWLockShared(lock)
         #else
             pthread_rwlock_unlock(lock)
-        #endif
-    }
-
-    @inlinable func writeLock() {
-        #if os(Windows)
-            AcquireSRWLockExclusive(lock)
-        #else
-            guard pthread_rwlock_wrlock(lock) == 0 else { fatalError("Unknown Error.") }
         #endif
     }
 
@@ -85,13 +69,21 @@ extension ReadWriteLock {
     }
 
     @inlinable func withReadLock<T>(_ body: () throws -> T) rethrows -> T {
-        readLock()
+        #if os(Windows)
+            AcquireSRWLockShared(lock)
+        #else
+            guard pthread_rwlock_rdlock(lock) == 0 else { fatalError("Unknown Error.") }
+        #endif
         defer { readUnlock() }
         return try body()
     }
 
     @inlinable func withWriteLock<T>(_ body: () throws -> T) rethrows -> T {
-        writeLock()
+        #if os(Windows)
+            AcquireSRWLockExclusive(lock)
+        #else
+            guard pthread_rwlock_wrlock(lock) == 0 else { fatalError("Unknown Error.") }
+        #endif
         defer { writeUnlock() }
         return try body()
     }

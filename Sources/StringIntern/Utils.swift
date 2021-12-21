@@ -18,32 +18,32 @@
 import Foundation
 import CoreFoundation
 
-func value<T>(_ v: T, isOneOf list: T...) -> Bool where T: Equatable { value(v, isOneOf: list) }
+@inlinable func value<T>(_ v: T, isOneOf list: T...) -> Bool where T: Equatable { value(v, isOneOf: list) }
 
-func value<T>(_ v: T, isOneOf list: [T]) -> Bool where T: Equatable {
+@inlinable func value<T>(_ v: T, isOneOf list: [T]) -> Bool where T: Equatable {
     for _v in list { if v == _v { return true } }
     return false
 }
 
-func ifNil<T>(_ obj: T?, yes: () throws -> Void, no: (T) throws -> Void) rethrows {
-    if let o = obj { try no(o) }
-    else { try yes() }
+@inlinable func ifNil<T, R>(_ obj: T?, yes: () throws -> R, no: (T) throws -> R) rethrows -> R {
+    guard let o = obj else { return try yes() }
+    return try no(o)
 }
 
-func ifNotNil<T>(_ obj: T?, _ yes: (T) throws -> Void) rethrows {
+@inlinable func ifNotNil<T>(_ obj: T?, _ yes: (T) throws -> Void) rethrows {
     if let o = obj { try yes(o) }
 }
 
-func ifThis(_ predicate: @autoclosure () -> Bool, thenDo this: () throws -> Void, elseDo that: () throws -> Void) rethrows {
+@inlinable func ifThis(_ predicate: @autoclosure () -> Bool, thenDo this: () throws -> Void, elseDo that: () throws -> Void) rethrows {
     if predicate() { try this() }
     else { try that() }
 }
 
 infix operator <=>: ComparisonPrecedence
 
-enum ComparisonResults { case LessThan, Equal, GreaterThan }
+@usableFromInline enum ComparisonResults { case LessThan, Equal, GreaterThan }
 
-func <=> <T>(left: T?, right: T?) -> ComparisonResults where T: Comparable {
+@inlinable func <=> <T>(left: T?, right: T?) -> ComparisonResults where T: Comparable {
     ((left == right) ? .Equal : (((right != nil) && ((left == nil) || (left! < right!))) ? .LessThan : .GreaterThan))
 }
 
