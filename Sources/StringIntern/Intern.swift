@@ -336,13 +336,10 @@ extension NSLock {
 class ReadWriteLock {
     #if os(Windows)
         typealias OSRWLock = UnsafeMutablePointer<SRWLOCK>
-        typealias OSThreadKey = DWORD
     #elseif CYGWIN
         typealias OSRWLock = UnsafeMutablePointer<pthread_rwlock_t?>
-        typealias OSThreadKey = pthread_key_t
     #else
         typealias OSRWLock = UnsafeMutablePointer<pthread_rwlock_t>
-        typealias OSThreadKey = pthread_key_t
     #endif
 
     var lock: OSRWLock
