@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1117D05EAFAFBF1C9B023B8F /* StringIntern.h in Headers */ = {isa = PBXBuildFile; fileRef = 1117D92AD66F1893259B17AD /* StringIntern.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1117D5C773C725F99C250EF6 /* StringIntern.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1117D53E1A42E29D21BDCA30 /* StringIntern.framework */; };
+		1117D5D79B8999A2BF74812C /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1117D69841268A57F93D9383 /* Constants.swift */; };
 		1117D95F274C06EE54F29BFA /* Intern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1117DB851716CF6D1853F2D1 /* Intern.swift */; };
 		83AB1489276A260200D95DBE /* StringInternTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AB1488276A260200D95DBE /* StringInternTests.swift */; };
 		83AB1496276A290500D95DBE /* StringIntern.docc in Sources */ = {isa = PBXBuildFile; fileRef = 83AB1495276A290500D95DBE /* StringIntern.docc */; };
@@ -29,6 +30,7 @@
 		1117D53E1A42E29D21BDCA30 /* StringIntern.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StringIntern.framework; path = "../../../Library/Caches/JetBrains/AppCode2021.3/DerivedData/StringIntern-dgqdccfydeebaldyyzyeephabbmo/Build/Products/Debug/StringIntern.framework"; sourceTree = "<group>"; };
 		1117D5F3B6F8786A83D1C0E7 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = file.gitignore; path = .gitignore; sourceTree = "<group>"; };
 		1117D614A5B8679840C771C8 /* Package.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		1117D69841268A57F93D9383 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		1117D75D885B17784DA42330 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		1117D92AD66F1893259B17AD /* StringIntern.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringIntern.h; sourceTree = "<group>"; };
 		1117DA3DEF7BC00E0DE72A1F /* StringInternTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file.xctest; name = StringInternTests.xctest; path = "../../../Library/Caches/JetBrains/AppCode2021.3/DerivedData/StringIntern-dgqdccfydeebaldyyzyeephabbmo/Build/Products/Debug/StringInternTests.xctest"; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 				83AB1495276A290500D95DBE /* StringIntern.docc */,
 				1117DC57D8577BF897C3850C /* Other */,
 				1117DB851716CF6D1853F2D1 /* Intern.swift */,
+				1117D69841268A57F93D9383 /* Constants.swift */,
 			);
 			path = StringIntern;
 			sourceTree = "<group>";
@@ -238,6 +241,7 @@
 			files = (
 				83AB1496276A290500D95DBE /* StringIntern.docc in Sources */,
 				1117D95F274C06EE54F29BFA /* Intern.swift in Sources */,
+				1117D5D79B8999A2BF74812C /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
